@@ -45,7 +45,7 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
-window.host = 'http://www.wenyunjy.com/'
+window.host = 'http://www.meili.com/'
 window.axios = axios
 window.axios.defaults.baseURL = window.host
 window.axios.defaults.onUploadProgress = null

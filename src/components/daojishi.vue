@@ -15,12 +15,13 @@ export default {
   },
   watch: {
     time (value) {
-      let cookTime = window.cookie.get('leftTime')
-      if (cookTime) {
-        this.initTime = cookTime
-      } else {
-        this.initTime = value
-      }
+      this.initTime = value
+      // let cookTime = window.cookie.get('leftTime')
+      // if (cookTime) {
+      //   this.initTime = cookTime
+      // } else {
+      //   this.initTime = value
+      // }
       this.calcLeftTime()
       this.setCookieTime()
     }

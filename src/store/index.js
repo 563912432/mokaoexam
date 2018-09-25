@@ -9,9 +9,13 @@ const store = new Vuex.Store({
     subject: {
       kuaijishiwu: 1,
       jingjifa: 2,
-      caiwuguanli: 3
+      caiwuguanli: 3,
+      chujishiwu: 4,
+      jingjifajichu: 5
     },
     course: {
+      chujishiwu: 21,
+      jingjifajichu: 22,
       kuaijishiwu: 23,
       jingjifa: 24,
       caiwuguanli: 25

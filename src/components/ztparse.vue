@@ -25,7 +25,7 @@
                   label="题型">
                 </el-table-column>
                 <el-table-column
-                  prop="num"
+                  prop="sub_num"
                   label="总数">
                 </el-table-column>
                 <el-table-column
@@ -44,13 +44,14 @@
                   label="分值/题">
                   <template slot-scope="scope">
                     <span v-if="scope.row.type !== 1 && scope.row.type !== 5 && scope.row.type !== 8"></span>
+                    <span v-if="scope.row.type === 15">2</span>
                     <span v-else>{{scope.row.score}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
                   label="得分">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.type !== 1 && scope.row.type !== 5 && scope.row.type !== 8"></span>
+                    <span v-if="scope.row.type !== 1 && scope.row.type !== 5 && scope.row.type !== 8 && scope.row.type !== 15"></span>
                     <span v-else>{{scope.row.user_score}}</span>
                   </template>
                 </el-table-column>
@@ -201,10 +202,21 @@
                       <!--<span class="flex-1 tm-text c-red" v-html="userAnswer[item.id]"></span>-->
                       <span v-if="tableData.length > 0">
                         <!--{{userAnswer[item.id]}}-->
-                        <span class="flex-1 tm-text c-blue" style="display: inline-block"
+                        <span v-if="item.type_cate !== tmType.bdxxuanze" class="flex-1 tm-text c-blue" style="display: inline-block"
                               v-html="userAnswer[item.number]?userAnswer[item.number][i]?userAnswer[item.number][i]['val']?userAnswer[item.number][i]['val']:'未作答':'未作答':'未作答'">
                         </span>
+                        <span v-else  style="display: inline-block"
+                              :class="['flex-1 tm-text',JSON.stringify(userAnswer[item.number][i]['val']) === JSON.stringify(item.right_answer[i])?'c-blue':'c-red']"
+                              v-html="userAnswer[item.number]?userAnswer[item.number][i]?userAnswer[item.number][i]['val']?strDuoXuan(userAnswer[item.number][i]['val']):'未作答':'未作答':'未作答'">
+                        </span>
                       </span>
+                    </div>
+                    <div class="flex" v-if="item.type_cate === tmType.bdxxuanze">
+                      <div class="w-80 mini-height40 text-center">
+                        <el-tag size="small" type="success">正确答案</el-tag>
+                      </div>
+                      <span class="flex-1 tm-text"
+                            v-html="strDuoXuan(item.right_answer[i])"></span>
                     </div>
                     <div class="flex">
                       <div class="w-80 mini-height40 text-center">

@@ -4,6 +4,7 @@ import index from '@/components/index'
 import exam from '@/components/exam'
 import ztparse from '@/components/ztparse'
 import score from '@/components/score'
+import scorechuji from '@/components/scorechuji'
 
 Vue.use(Router)
 
@@ -40,6 +41,14 @@ export default new Router({
         needLogin: true
       },
       component: score
+    },
+    {
+      path: '/scorechuji/:id/:index',
+      name: 'scorechuji',
+      meta: {
+        needLogin: true
+      },
+      component: scorechuji
     }
   ]
 })

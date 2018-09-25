@@ -1,7 +1,11 @@
 <template>
   <div class="zt">
     <div class="zt-header pd-left-right-10" style="background-color: #409EFF;">
-      <h4 style="color: #fff;letter-spacing: 2px">中级会计职称万人模考【第{{num}}期】</h4>
+      <h4 style="color: #fff;letter-spacing: 2px">
+        <span v-if="tag === 'chujikuaiji'">初级会计职称万人模考</span>
+        <span v-if="tag === 'zhongjikuaiji'">中级会计职称万人模考</span>
+        【第{{num}}期】
+      </h4>
     </div>
     <div class="border-bottom-line pd-15 flex flex-justify-between flex-align-center">
       <span class="f20">
@@ -56,6 +60,7 @@
           <panduan v-if="parseInt(currTiMu.type_cate) === tmType.panduan" :timu="currTiMu" :panduanTi="paperInfo['info'][currTiMu.type]"></panduan>
           <jianda v-if="parseInt(currTiMu.type_cate) === tmType.jianda" :timu="currTiMu" :jiandaTi="paperInfo['info'][currTiMu.type]"></jianda>
           <ztjisuanfenxi v-if="parseInt(currTiMu.type_cate) === tmType.bdxjianda" :timu="currTiMu" :jiandaTi="paperInfo['info'][currTiMu.type]"></ztjisuanfenxi>
+          <ztbudingxiang v-if="parseInt(currTiMu.type_cate) === tmType.bdxxuanze" :timu="currTiMu" :jiandaTi="paperInfo['info'][currTiMu.type]"></ztbudingxiang>
           <el-button class="jisuanqi" size="small" type="primary" @click="openCalculator">计算器</el-button>
         </div>
         <div class="card-bottom flex">
@@ -88,6 +93,7 @@ import duoxuan from './ztduoxuan'
 import panduan from './ztpanduan'
 import jianda from './ztjianda'
 import ztjisuanfenxi from './ztjisuanfenxi'
+import ztbudingxiang from './ztbudingxiang'
 import {mapState, mapGetters} from 'vuex'
 export default {
   name: 'homework',
@@ -97,7 +103,8 @@ export default {
     'duoxuan': duoxuan,
     'panduan': panduan,
     'jianda': jianda,
-    'ztjisuanfenxi': ztjisuanfenxi
+    'ztjisuanfenxi': ztjisuanfenxi,
+    'ztbudingxiang': ztbudingxiang
   },
   computed: {
     ...mapState(['tmType']),
@@ -108,6 +115,9 @@ export default {
     },
     host () {
       return window.host
+    },
+    tag () {
+      return window.tag
     }
   },
   data () {
