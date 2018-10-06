@@ -19,7 +19,7 @@
           </div>
         </div>
       </div>
-      <div class="score1-text"><i class="el-icon-bell"></i> <span>主观题不评分，请自行比对，成绩排行只显示客观题得分排名</span></div>
+      <!--<div class="score1-text"><i class="el-icon-bell"></i> <span>主观题不评分，请自行比对，成绩排行只显示客观题得分排名</span></div>-->
       <div class="content">
         <div v-if="tabIndex === '0'" class="score1-header"></div>
         <div v-if="tabIndex === '1'" class="score1-header1"></div>

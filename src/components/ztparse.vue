@@ -57,7 +57,7 @@
                 </el-table-column>
               </el-table>
             </div>
-            <div class="f15 c-blue flex flex-align-center flex-justify-center mb-15">
+            <div v-if="courseType !== 'chujikuaiji'" class="f15 c-blue flex flex-align-center flex-justify-center mb-15">
               <span><span><i class="el-icon-warning"></i></span> <span>主观题不评分，请自行比对，成绩排行只显示客观题得分排名</span></span>
             </div>
             <div class="f18 c-red flex flex-align-center flex-justify-center">
@@ -200,13 +200,12 @@
                         <el-tag size="small" type="warning">您的答案</el-tag>
                       </div>
                       <!--<span class="flex-1 tm-text c-red" v-html="userAnswer[item.id]"></span>-->
-                      <span v-if="tableData.length > 0">
-                        <!--{{userAnswer[item.id]}}-->
+                      <span v-if="tableData.length >= 0">
                         <span v-if="item.type_cate !== tmType.bdxxuanze" class="flex-1 tm-text c-blue" style="display: inline-block"
                               v-html="userAnswer[item.number]?userAnswer[item.number][i]?userAnswer[item.number][i]['val']?userAnswer[item.number][i]['val']:'未作答':'未作答':'未作答'">
                         </span>
                         <span v-else  style="display: inline-block"
-                              :class="['flex-1 tm-text',JSON.stringify(userAnswer[item.number][i]['val']) === JSON.stringify(item.right_answer[i])?'c-blue':'c-red']"
+                              :class="['flex-1 tm-text',userAnswer[item.number]?userAnswer[item.number][i]?userAnswer[item.number][i]['val']?(JSON.stringify(userAnswer[item.number][i]['val']) === JSON.stringify(item.right_answer[i])?'c-blue':'c-red'):'':'':'']"
                               v-html="userAnswer[item.number]?userAnswer[item.number][i]?userAnswer[item.number][i]['val']?strDuoXuan(userAnswer[item.number][i]['val']):'未作答':'未作答':'未作答'">
                         </span>
                       </span>
@@ -286,7 +285,8 @@ export default {
       regroupAllExam: [],
       userAnswer: {},
       dialogVisible: false,
-      videoPlayer: null
+      videoPlayer: null,
+      courseType: window.tag
     }
   },
   computed: {
