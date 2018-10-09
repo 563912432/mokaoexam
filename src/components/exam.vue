@@ -151,14 +151,6 @@ export default {
     // this.removeCookieTime()
   },
   mounted () {
-    if (!this.running) {
-      this.$message.error('当前考试已结束')
-      this.$router.go(-1)
-    }
-    if (this.hasFinish) {
-      this.$message.error('考试已完成')
-      this.$router.go(-1)
-    }
   },
   beforeRouteEnter (to, from, next) {
     // 考试
@@ -206,6 +198,14 @@ export default {
           // } else {
           //   this.regroupTiMu()
           // }
+          if (!this.running) {
+            this.$message.error('当前考试已结束')
+            this.$router.go(-1)
+          }
+          if (this.hasFinish) {
+            this.$message.error('考试已完成')
+            this.$router.go(-1)
+          }
           this.regroupTiMu()
         } else {
           this.$message.error(res.data.info)
