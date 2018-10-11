@@ -467,7 +467,7 @@ export default {
   }
 
   .aside-nav {
-    position: absolute;
+    position: fixed;
     bottom: 40px;
     right: 90px;
   }

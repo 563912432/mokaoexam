@@ -7,7 +7,6 @@
           <!--总站-->
           <div v-if="user">
             <span>欢迎你，{{name}}</span>
-            <span class="top-button" @click="toRegister">注册</span>
           </div>
           <div v-else>
             <span class="top-button" @click="toLogin">登录</span>
