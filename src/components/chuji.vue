@@ -227,7 +227,7 @@ export default {
   methods: {
     // 跳转登录
     toLogin () {
-      location.href = window.host + 'login?fromurl=' + window.host + 'mkindex/chujikuaiji'
+      location.href = window.host + 'login?fromurl=' + window.host + encodeURI('mkindex/chujikuaiji')
     },
     toRegister () {
       location.href = window.host + 'register?fromurl=' + window.host + encodeURI('mkindex/chujikuaiji')
