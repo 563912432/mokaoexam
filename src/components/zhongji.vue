@@ -2,8 +2,17 @@
   <div class="index">
     <div class="top-tab flex flex-align-center flex-justify-end">
       <div style="padding: 5px 20px">
-        <!--<span class="top-button">登录</span>-->
-        <!--<span class="top-button">注册</span>-->
+        <div v-if="parseInt(source) === 1">
+          <!--总站-->
+          <div v-if="user">
+            <span>欢迎你，{{name}}</span>
+            <span class="top-button" @click="toRegister">注册</span>
+          </div>
+          <div v-else>
+            <span class="top-button" @click="toLogin">登录</span>
+            <span class="top-button" @click="toRegister">注册</span>
+          </div>
+        </div>
       </div>
     </div>
     <div class="index1">
@@ -257,12 +266,28 @@ export default {
     }
   },
   computed: {
-    ...mapState(['subject', 'course'])
+    ...mapState(['subject', 'course']),
+    user () {
+      return window.userInfo.key
+    },
+    source () {
+      return window.userInfo.source
+    },
+    name () {
+      return window.userInfo.name
+    }
   },
   created () {
     this.initData()
   },
   methods: {
+    // 跳转登录
+    toLogin () {
+      location.href = window.host + 'login?fromurl=' + window.host + 'mkindex/zhongjikuaiji'
+    },
+    toRegister () {
+      location.href = window.host + 'register?fromurl=' + window.host + encodeURI('mkindex/zhongjikuaiji')
+    },
     initData () {
       this.getCurrentExam()
     },
@@ -321,26 +346,91 @@ export default {
         }
       })
     },
-    toExam (id) {
-      let routeData = this.$router.resolve(`/exam/${id}`)
-      window.open(routeData.href, '_blank')
-      // this.$router.push(`/exam/${id}`)
+    toExam (id) { // zuoti
+      // 跳转做题 首先判断有没有登录
+      if (this.user !== '') {
+        let routeData = this.$router.resolve(`/exam/${id}`)
+        window.open(routeData.href, '_blank')
+      } else {
+        this.$message.warning('请先登录')
+        setTimeout(() => {
+          this.toLogin()
+        }, 1000)
+      }
     },
-    textParse (id) {
-      let routeData = this.$router.resolve(`/ztparse/${id}`)
-      window.open(routeData.href, '_blank')
-      // this.$router.push(`/ztparse/${id}`)
+    textParse (id) { // wenzijiexi
+      if (this.user !== '') {
+        let routeData = this.$router.resolve(`/ztparse/${id}`)
+        window.open(routeData.href, '_blank')
+      } else {
+        this.$message.warning('请先登录')
+        setTimeout(() => {
+          this.toLogin()
+        }, 1000)
+      }
     },
-    videoParse (liveUrl) {
-      window.open(liveUrl, '_blank')
+    videoParse (liveUrl) { // shipinjiexi
+      if (this.user !== '') {
+        let tmpArr = liveUrl.split(',')
+        if (tmpArr.length > 1) {
+          switch (parseInt(window.userInfo.source)) {
+            case 1: // wenyunjy
+              window.open(tmpArr[0], '_blank')
+              break
+            case 2: // wdexam
+              window.open(tmpArr[1], '_blank')
+              break
+            default:
+              window.open(tmpArr[0], '_blank')
+              break
+          }
+        } else {
+          // 只有一个
+          window.open(liveUrl, '_blank')
+        }
+      } else {
+        this.$message.warning('请先登录')
+        setTimeout(() => {
+          this.toLogin()
+        }, 1000)
+      }
     },
-    watchScore (id, index) {
-      let routeData = this.$router.resolve(`/score/${id}/${index}`)
-      window.open(routeData.href, '_blank')
-      // this.$router.push(`/score/${id}/${index}`)
+    watchScore (id, index) { // chakanpaiming
+      if (this.user !== '') {
+        let routeData = this.$router.resolve(`/score/${id}/${index}`)
+        window.open(routeData.href, '_blank')
+      } else {
+        this.$message.warning('请先登录')
+        setTimeout(() => {
+          this.toLogin()
+        }, 1000)
+      }
     },
-    videoHistory () {
-      window.open(this.historyRoom, '_blank')
+    videoHistory () { // lishijiludeshipingjiexi
+      if (this.user !== '') {
+        let tmpArr = this.historyRoom.split(',')
+        if (tmpArr.length > 1) {
+          switch (parseInt(window.userInfo.source)) {
+            case 1: // wenyunjy
+              window.open(tmpArr[0], '_blank')
+              break
+            case 2: // wdexam
+              window.open(tmpArr[1], '_blank')
+              break
+            default:
+              window.open(tmpArr[0], '_blank')
+              break
+          }
+        } else {
+          // 只有一个
+          window.open(this.historyRoom, '_blank')
+        }
+      } else {
+        this.$message.warning('请先登录')
+        setTimeout(() => {
+          this.toLogin()
+        }, 1000)
+      }
     }
   }
 }
@@ -426,6 +516,7 @@ export default {
     background-color: #333;
     z-index: 3;
     box-sizing: border-box;
+    color: #ffffff;
   }
 
   .top-button {

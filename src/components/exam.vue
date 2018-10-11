@@ -200,16 +200,22 @@ export default {
           // }
           if (!this.running) {
             this.$message.error('当前考试已结束')
-            this.$router.go(-1)
+            setTimeout(() => {
+              this.$router.push('/')
+            }, 1000)
           }
           if (this.hasFinish) {
             this.$message.error('考试已完成')
-            this.$router.go(-1)
+            setTimeout(() => {
+              this.$router.push('/')
+            }, 1000)
           }
           this.regroupTiMu()
         } else {
           this.$message.error(res.data.info)
-          this.$router.push('/')
+          setTimeout(() => {
+            this.$router.push('/')
+          }, 1000)
         }
       })
     },

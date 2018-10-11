@@ -14,7 +14,7 @@ export default new Router({
       path: '/',
       name: 'index',
       meta: {
-        needLogin: true
+        needLogin: false
       },
       component: index
     },

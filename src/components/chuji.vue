@@ -2,8 +2,18 @@
   <div class="index">
     <div class="top-tab flex flex-align-center flex-justify-end">
       <div style="padding: 5px 20px">
-        <!--<span class="top-button">登录</span>-->
-        <!--<span class="top-button">注册</span>-->
+        <!--todo 判断来源是代理还是总站-->
+        <div v-if="parseInt(source) === 1">
+          <!--总站-->
+          <div v-if="user">
+            <span>欢迎你，{{name}}</span>
+            <span class="top-button" @click="toRegister">注册</span>
+          </div>
+          <div v-else>
+            <span class="top-button" @click="toLogin">登录</span>
+            <span class="top-button" @click="toRegister">注册</span>
+          </div>
+        </div>
       </div>
     </div>
     <div class="index1">
@@ -201,12 +211,28 @@ export default {
     }
   },
   computed: {
-    ...mapState(['subject', 'course'])
+    ...mapState(['subject', 'course']),
+    user () {
+      return window.userInfo.key
+    },
+    source () {
+      return window.userInfo.source
+    },
+    name () {
+      return window.userInfo.name
+    }
   },
   created () {
     this.initData()
   },
   methods: {
+    // 跳转登录
+    toLogin () {
+      location.href = window.host + 'login?fromurl=' + window.host + 'mkindex/chujikuaiji'
+    },
+    toRegister () {
+      location.href = window.host + 'register?fromurl=' + window.host + encodeURI('mkindex/chujikuaiji')
+    },
     initData () {
       this.getCurrentExam()
     },
@@ -215,7 +241,6 @@ export default {
       window.axios.get(`api/mokao/index/${window.mokaoType}`).then(res => {
         if (res.data.status) {
           this.currentExam = res.data.resultData
-          console.log(this.currentExam)
           // 处理富文本的不解析转义字符
           this.currentExam.rules = this.currentExam.rules.replace(this.currentExam.rules ? /&(?!#?\w+;)/g : /&/g, '&amp;')
             .replace(/&lt;/g, '<')
@@ -265,26 +290,91 @@ export default {
         }
       })
     },
-    toExam (id) {
-      let routeData = this.$router.resolve(`/exam/${id}`)
-      window.open(routeData.href, '_blank')
-      // this.$router.push(`/exam/${id}`)
+    toExam (id) { // zuoti
+      // 跳转做题 首先判断有没有登录
+      if (this.user !== '') {
+        let routeData = this.$router.resolve(`/exam/${id}`)
+        window.open(routeData.href, '_blank')
+      } else {
+        this.$message.warning('请先登录')
+        setTimeout(() => {
+          this.toLogin()
+        }, 1000)
+      }
     },
-    textParse (id) {
-      let routeData = this.$router.resolve(`/ztparse/${id}`)
-      window.open(routeData.href, '_blank')
-      // this.$router.push(`/ztparse/${id}`)
+    textParse (id) { // wenzijiexi
+      if (this.user !== '') {
+        let routeData = this.$router.resolve(`/ztparse/${id}`)
+        window.open(routeData.href, '_blank')
+      } else {
+        this.$message.warning('请先登录')
+        setTimeout(() => {
+          this.toLogin()
+        }, 1000)
+      }
     },
-    videoParse (liveUrl) {
-      window.open(liveUrl, '_blank')
+    videoParse (liveUrl) { // shipinzhibo
+      if (this.user !== '') {
+        let tmpArr = liveUrl.split(',')
+        if (tmpArr.length > 1) {
+          switch (parseInt(window.userInfo.source)) {
+            case 1: // wenyunjy
+              window.open(tmpArr[0], '_blank')
+              break
+            case 2: // wdexam
+              window.open(tmpArr[1], '_blank')
+              break
+            default:
+              window.open(tmpArr[0], '_blank')
+              break
+          }
+        } else {
+          // 只有一个
+          window.open(liveUrl, '_blank')
+        }
+      } else {
+        this.$message.warning('请先登录')
+        setTimeout(() => {
+          this.toLogin()
+        }, 1000)
+      }
     },
-    watchScore (id, index) {
-      let routeData = this.$router.resolve(`/scorechuji/${id}/${index}`)
-      window.open(routeData.href, '_blank')
-      // this.$router.push(`/score/${id}/${index}`)
+    watchScore (id, index) { // chakanpaiming
+      if (this.user !== '') {
+        let routeData = this.$router.resolve(`/scorechuji/${id}/${index}`)
+        window.open(routeData.href, '_blank')
+      } else {
+        this.$message.warning('请先登录')
+        setTimeout(() => {
+          this.toLogin()
+        }, 1000)
+      }
     },
-    videoHistory () {
-      window.open(this.historyRoom, '_blank')
+    videoHistory () { // lishijiludeshipingjiexi
+      if (this.user !== '') {
+        let tmpArr = this.historyRoom.split(',')
+        if (tmpArr.length > 1) {
+          switch (parseInt(window.userInfo.source)) {
+            case 1: // wenyunjy
+              window.open(tmpArr[0], '_blank')
+              break
+            case 2: // wdexam
+              window.open(tmpArr[1], '_blank')
+              break
+            default:
+              window.open(tmpArr[0], '_blank')
+              break
+          }
+        } else {
+          // 只有一个
+          window.open(this.historyRoom, '_blank')
+        }
+      } else {
+        this.$message.warning('请先登录')
+        setTimeout(() => {
+          this.toLogin()
+        }, 1000)
+      }
     }
   }
 }
@@ -370,6 +460,7 @@ export default {
     background-color: #333;
     z-index: 3;
     box-sizing: border-box;
+    color: #ffffff;
   }
 
   .top-button {
@@ -411,7 +502,7 @@ export default {
     width: 1280px;
     height: 216px;
     margin: 0 auto;
-    background: url('../assets/index2.png') no-repeat center;
+    background: url('../assets/index2-1.png') no-repeat center;
     position: relative;
     z-index: 1;
   }
