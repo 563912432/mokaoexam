@@ -24,6 +24,10 @@
       <!--时间-->
       <div class="index3-time">{{timeChange(currentExam.start)}} - {{timeChange(currentExam.end)}}</div>
     </div>
+    <div class="index7">
+      <!--视频解析预览-->
+      <introvideo :videos="this.currentExam.introvideo"></introvideo>
+    </div>
     <div class="index4">
       <!--考试说明-->
       <div class="index4-info" v-html="currentExam.rules"></div>
@@ -44,11 +48,7 @@
           <div v-if="parseInt(paper.course_id) === parseInt(course.chujishiwu)" class="index5-bottom1">
             <!--初级会计实务【0】-->
             <div class="index5-div flex flex-column flex-align-center flex-justify-center">
-              <div v-if="currentExam.running === -1" class="text-center">
-                <div class="margin-top-10">
-                  <el-button disabled type="success" round class="button green">未开始</el-button>
-                </div>
-              </div>
+              <unrunningbtn v-if="currentExam.running === -1" :currentExam="currentExam"></unrunningbtn>
               <div v-else-if="!currentExam.running" class="text-center">
                 <div>
                   <el-button disabled type="success" round class="button green">已结束</el-button>
@@ -99,9 +99,7 @@
           <div v-if="parseInt(paper.course_id) === parseInt(course.jingjifajichu)" class="index5-bottom2">
             <!--经济法基础【1】-->
             <div class="index5-div flex flex-column flex-align-center flex-justify-center">
-              <div v-if="currentExam.running === -1" class="text-center">
-                <el-button disabled type="success" round class="button green">未开始</el-button>
-              </div>
+              <unrunningbtn v-if="currentExam.running === -1" :currentExam="currentExam"></unrunningbtn>
               <div v-else-if="!currentExam.running" class="text-center">
                 <div class="margin-top-10">
                   <el-button disabled type="success" round class="button green">已结束</el-button>
@@ -192,9 +190,15 @@
 
 <script>
 import { mapState } from 'vuex'
+import unrunningbtn from './unrunningbtn'
+import introvideo from './introvideo'
 
 export default {
   name: 'index',
+  components: {
+    unrunningbtn,
+    introvideo
+  },
   data () {
     return {
       currentExam: {
@@ -202,11 +206,14 @@ export default {
         paper: [{id: '0', done: 0}, {id: '0', done: 0}, {id: '0', done: 0}],
         start: '',
         end: '',
-        rules: ''
+        rules: '',
+        introvideo: [],
+        appointed: 0
       },
       nowTime: '',
       historyData: [],
-      historyRoom: ''
+      historyRoom: '',
+      videos: []
     }
   },
   computed: {
@@ -704,5 +711,15 @@ export default {
     top: 150px;
     left: 30px;
     z-index: 3;
+  }
+
+  .index7 {
+    height: auto;
+    width: 1280px;
+    margin: 0 auto;
+    padding: 0 0 20px 0;
+    /*background:#3c2166 url('../assets/index5.png') no-repeat center;*/
+    z-index: 1;
+    position: relative;
   }
 </style>

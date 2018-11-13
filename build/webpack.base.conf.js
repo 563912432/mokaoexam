@@ -38,6 +38,9 @@ module.exports = {
       '@': resolve('src'),
     }
   },
+  externals: {
+    'polyvObject': 'polyvObject'
+  },
   module: {
     rules: [
       ...(config.dev.useEslint ? [createLintingRule()] : []),
