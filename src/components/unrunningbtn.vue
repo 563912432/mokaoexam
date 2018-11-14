@@ -3,9 +3,12 @@
     <div class="margin-top-10" style="margin-bottom: 20px;">
       <div style="color: #fff;text-align: center;">考试将于 {{timeChange(currentExam.start)}} 开始</div>
     </div>
-    <div class="margin-top-10" style="margin-bottom: 50px;">
+    <div v-if="source == 1" class="margin-top-10" style="margin-bottom: 50px;">
       <el-button v-if="currentExam.appointed===1" type="primary" round class="button purple">您已预约</el-button>
       <el-button v-else type="primary" @click="appoint" round class="button green">预约提醒</el-button>
+    </div>
+    <div v-else class="margin-top-10" style="margin-bottom: 50px;">
+      <el-button type="primary" round class="button green">未开始</el-button>
     </div>
   </div>
 </template>
@@ -18,7 +21,9 @@ export default {
   },
   props: ['currentExam'],
   computed: {
-
+    source () {
+      return parseInt(window.userInfo.source)
+    }
   },
   methods: {
     appoint () {
