@@ -26,15 +26,16 @@ export default {
     }
   },
   methods: {
+    toLogin () {
+      location.href = window.host + 'login?fromurl=' + window.host + encodeURI('mkindex/' + window.tag)
+    },
     appoint () {
       // 判断是否登陆，没登陆的跳转到登陆页面
       if (!window.userInfo.key) {
-        this.$router.push({
-          path: '/',
-          query: {
-            redirect: this.$route.fullPath
-          }
-        })
+        this.$message.warning('请先登录')
+        setTimeout(() => {
+          this.toLogin()
+        }, 1000)
       } else {
         // 提交请求
         window.axios.post('api/mokao/appoint/' + this.currentExam.id).then(res => {
